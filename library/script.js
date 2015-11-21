@@ -2,15 +2,20 @@ var catalog = [];
 //Load the text, fill catalog with parsed text file
 $('document').ready(function(){
 	 $.get("http://raw.githubusercontent.com/OpenExoplanetCatalogue/oec_tables/master/comma_separated/open_exoplanet_catalogue.txt", function(data) {
-		fillCatalog(catalog,parseText(data),function(){
+		space.fillCatalog(catalog,space.parseExoText(data),function(){
 			for(p in catalog){
 					console.log(catalog[p])
 			}
 		});
 	    });
 });
+
+var space = function(){
+	this.url = "http://raw.githubusercontent.com/OpenExoplanetCatalogue/oec_tables/master/comma_separated/open_exoplanet_catalogue.txt";	
+}
+
 //Parse the csv and return an array
-function parseText(txt){
+space.prototype.parseExoText = function (txt){
 	txt = txt.split('\n');
 	txt.splice(0,30);
 	for(e in txt){
@@ -24,14 +29,14 @@ function parseText(txt){
 	return txt;
 };
 //fill the catalog with exoplanet objects made from the array data
-function fillCatalog(cat, data, Callback){
+space.prototype.fillCatalog = function (cat, data, Callback){
 	for(planet in data){
 		cat.push(new Exoplanet(data[planet]));
 	}
 	Callback();
 }
 //Constructor for exoplanets
-function Exoplanet(kEntry){
+space.prototype.Exoplanet = function (kEntry){
 	this.id=kEntry[0];
 	
 	this.planProps = {
