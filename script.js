@@ -1,14 +1,16 @@
-var catalog = [];
+var catalog;
+
 //Load the text, fill catalog with parsed text file
 $('document').ready(function(){
 	 $.get("http://raw.githubusercontent.com/OpenExoplanetCatalogue/oec_tables/master/comma_separated/open_exoplanet_catalogue.txt", function(data) {
-		fillCatalog(catalog,parseText(data),function(){
+		        catalog = fillCatalog(parseText(data));
 			for(p in catalog){
 					console.log(catalog[p])
 			}
-		});
+			console.log(radecToXYZ(catalog[10].astroCoords))
 	    });
 });
+
 //Parse the csv and return an array
 function parseText(txt){
 	txt = txt.split('\n');
@@ -23,13 +25,16 @@ function parseText(txt){
 	}
 	return txt;
 };
+
 //fill the catalog with exoplanet objects made from the array data
-function fillCatalog(cat, data, Callback){
+function fillCatalog(data){
+	var cat = [];
 	for(planet in data){
 		cat.push(new Exoplanet(data[planet]));
 	}
-	Callback();
+	return cat;
 }
+
 //Constructor for exoplanets
 function Exoplanet(kEntry){
 	this.id=kEntry[0];
@@ -80,4 +85,17 @@ function Exoplanet(kEntry){
 		starTemp : parseFloat(kEntry[22]), // Kelvin
 		starAge : parseFloat(kEntry[23]), // Gyr
 	}
+}
+
+function radecToXYZ(_astrocoords){
+	var _ra = _astrocoords.RA.h+_astrocoords.RA.m/60+_astrocoords.RA.s/3600;
+	var _dec = _astrocoords.DEC.d+_astrocoords.DEC.m/60+_astrocoords.DEC.s/3600;
+ 	var _dist = _astrocoords.dist;
+	var X = Math.cos(_ra) * Math.cos(_dec) * _dist;
+     	var Y = Math.sin(_ra) * Math.cos(_dec) * _dist;
+        var Z = Math.sin(_dec) * _dist;
+
+	var cart = [X,Y,Z];
+
+	return cart;
 }
