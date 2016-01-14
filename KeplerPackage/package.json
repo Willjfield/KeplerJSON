@@ -1,0 +1,22 @@
+{
+  "name": "kepler",
+  "version": "1.0.0",
+  "description": "Get Kepler exoplanet data and create planet objects",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [
+    "kepler",
+    "nasa",
+    "exoplanet",
+    "data"
+  ],
+  "dependencies": {
+    "xhr2": "*",
+	"http":"*",
+	"request" : "*"
+  },
+  "author": "willjfield",
+  "license": "ISC"
+}
